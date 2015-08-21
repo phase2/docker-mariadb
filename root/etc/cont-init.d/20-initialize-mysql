@@ -1,0 +1,57 @@
+#!/usr/bin/with-contenv sh
+
+create_mysql_admin_user() {
+  INIT_SOCKET=/var/lib/mysql/init.sock 
+  MYSQL="mysql -uroot --socket=${INIT_SOCKET}"
+
+  # Start our temporary MySQL with no networking so there are no mishaps.
+  /usr/bin/mysqld_safe --user=mysql --socket=$INIT_SOCKET --skip-networking > /dev/null 2>&1 &
+
+  RET=1
+  while [[ $RET -ne 0 ]]; do
+    echo "=> Waiting for confirmation of MySQL service startup"
+    sleep 2
+    $MYSQL -e "status" > /dev/null 2>&1
+    RET=$?
+  done
+
+  PASS=$MYSQL_PASS
+  _word=$( [ $MYSQL_PASS ] && echo "preset" || echo "random" )
+  echo "=> Creating MySQL admin user with ${_word} password"
+
+  $MYSQL -e "CREATE USER 'admin'@'%' IDENTIFIED BY '$PASS'"
+  $MYSQL -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION"
+  $MYSQL -e "CREATE USER 'admin'@'localhost' IDENTIFIED BY '$PASS'"
+  $MYSQL -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'localhost' WITH GRANT OPTION"
+
+  # Remove anonymous users without a password. Remove remote root (with no password.)
+  $MYSQL -e "DROP USER ''@'`hostname`'"
+  $MYSQL -e "DROP USER 'root'@'`hostname`'"
+  $MYSQL -e "DROP USER ''@'localhost'"
+  $MYSQL -e "FLUSH PRIVILEGES;"
+
+  echo "=> Done!"
+
+  echo "=> ===================================================================="
+  echo "=> You can now connect to this MySQL Server using:"
+  echo "=>"
+  echo "=>    mysql -uadmin -p$PASS -h<host> -P<port>"
+  echo "=>"
+  echo "=> Please remember to change the above password as soon as possible!"
+  echo "=> MySQL user 'root' has no password but only allows local connections."
+  echo "=> ===================================================================="
+
+  mysqladmin -uroot --socket=$INIT_SOCKET shutdown
+}
+
+VOLUME_HOME="/var/lib/mysql"
+
+if [[ ! -d $VOLUME_HOME/mysql ]]; then
+  echo "=> An empty or uninitialized MySQL volume is detected in $VOLUME_HOME"
+  echo "=> Installing MySQL ..."
+  mysql_install_db --user=mysql > /dev/null 2>&1
+  echo "=> Done!"
+  create_mysql_admin_user
+else
+  echo "=> Using an existing volume of MySQL"
+fi
