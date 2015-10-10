@@ -1,9 +1,9 @@
 #!/usr/bin/with-contenv sh
 
-create_mysql_admin_user() {
-  INIT_SOCKET=/var/lib/mysql/init.sock 
-  MYSQL="mysql -uroot --socket=${INIT_SOCKET}"
+INIT_SOCKET=/var/lib/mysql/init.sock
+MYSQL="mysql -uroot --socket=${INIT_SOCKET}"
 
+mysql_connect() {
   # Start our temporary MySQL with no networking so there are no mishaps.
   /usr/bin/mysqld_safe --user=mysql --socket=$INIT_SOCKET --skip-networking > /dev/null 2>&1 &
 
@@ -14,7 +14,13 @@ create_mysql_admin_user() {
     $MYSQL -e "status" > /dev/null 2>&1
     RET=$?
   done
+}
 
+mysql_disconnect() {
+  mysqladmin -uroot --socket=$INIT_SOCKET shutdown
+}
+
+create_mysql_admin_user() {
   PASS=$MYSQL_PASS
   _word=$( [ $MYSQL_PASS ] && echo "preset" || echo "random" )
   echo "=> Creating MySQL admin user with ${_word} password"
@@ -40,8 +46,14 @@ create_mysql_admin_user() {
   echo "=> Please remember to change the above password as soon as possible!"
   echo "=> MySQL user 'root' has no password but only allows local connections."
   echo "=> ===================================================================="
+}
 
-  mysqladmin -uroot --socket=$INIT_SOCKET shutdown
+create_mysql_database() {
+  if [ "$MYSQL_DATABASE" ]; then
+    echo "=> Ensure MySQL database exists: '$MYSQL_DATABASE'"
+    $MYSQL -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE"
+    echo "=> Done!"
+  fi
 }
 
 VOLUME_HOME="/var/lib/mysql"
@@ -51,7 +63,10 @@ if [[ ! -d $VOLUME_HOME/mysql ]]; then
   echo "=> Installing MySQL ..."
   mysql_install_db --user=mysql > /dev/null 2>&1
   echo "=> Done!"
+  mysql_connect
   create_mysql_admin_user
+  create_mysql_database
+  mysql_disconnect
 else
   echo "=> Using an existing volume of MySQL"
 fi
