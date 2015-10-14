@@ -50,7 +50,7 @@ create_mysql_admin_user() {
 
 create_mysql_database() {
   if [ "$MYSQL_DATABASE" ]; then
-    echo "=> Ensure MySQL database exists: '$MYSQL_DATABASE'"
+    echo "=> Create MySQL database: '$MYSQL_DATABASE'"
     $MYSQL -e "CREATE DATABASE IF NOT EXISTS $MYSQL_DATABASE"
     echo "=> Done!"
   fi
