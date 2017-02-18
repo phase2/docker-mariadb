@@ -1,72 +1,79 @@
-![logo](https://www.phase2technology.com/wp-content/uploads/2015/06/logo-retina.png)
 
-## Description
+# Outrigger Varnish
 
-This mariadb image is a MySQL compliant database image with configuration through a collection of environment variables detailed below.
+> MariaDB docker container with easy configuration via environment variables.
+
+[![](https://images.microbadger.com/badges/version/outrigger/mariadb.svg)](https://microbadger.com/images/outrigger/mariadb "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/outrigger/mariadb.svg)](https://microbadger.com/images/outrigger/mariadb "Get your own image badge on microbadger.com")
+
+This mariadb image is a MySQL compliant database image with configuration through
+a collection of environment variables detailed below.
+
+For more documentation on how Outrigger images are constructed and how to work
+with them, please [see the documentation](http://docs.outrigger.sh/en/latest/).
 
 ## How to use this image
 
-Starting a MariaDB instance is simple:
+Starting a MariaDB instance:
 
-$ docker run --name some-mariadb -e MYSQL_PASS=my-secret-pw -d phase2/mariadb
+```bash
+docker run --name some-mariadb -e MYSQL_PASS=my-secret-pw -d phase2/mariadb
+```
 
-... where some-mariadb is the name you want to assign to your container, my-secret-pw is the password to be set for the MySQL root user
+... where some-mariadb is the name you want to assign to your container and
+my-secret-pw is the password to be set for the MySQL root user
 
-## Using a custom MySQL configuration file
-The MariaDB startup configuration is specified in the file /etc/mysql/my.cnf, and that file in turn includes any files found in the etc/mysql/conf.d directory that end with .cnf. Settings in files in this directory will augment and/or override settings in /etc/mysql/my.cnf. If you want to use a customized MySQL configuration, you can create your alternative configuration file in a directory on the host machine and then mount that directory location as /etc/mysql/conf.d inside the mariadb container.
+### Customizing Database Behavior
 
-If /my/custom/config-file.cnf is the path and name of your custom configuration file, you can start your mariadb container like this note that only the directory path of the custom config file is used in this command):
+The MariaDB startup configuration is specified in the file `/etc/mysql/my.cnf`,
+and that file in turn includes any files found in the `etc/mysql/conf.d`
+directory that end with `.cnf`. Settings in files in this directory will augment
+and/or override settings in /etc/mysql/my.cnf.
 
-$ docker run --name some-mariadb -v /my/custom:/etc/mysql/conf.d -e MYSQL_PASS=my-secret-pw -d phase2/mariadb
+If you want to use a customized MySQL configuration, you can create your
+alternative configuration file in a directory on the host machine and then mount
+that directory location as `/etc/mysql/conf.d` inside the mariadb container.
 
-This will start a new container some-mariadb where the MariaDB instance uses the combined startup settings from /etc/mysql/my.cnf and /etc/mysql/conf.d/config-file.cnf, with settings from the latter taking precedence.
+If `/my/custom/config-file.cnf` is the path and name of your custom
+configuration file, you can start your mariadb container like this note that
+only the directory path of the custom config file is used in this command):
 
+```bash
+docker run --name some-mariadb -v /my/custom:/etc/mysql/conf.d -e MYSQL_PASS=my-secret-pw -d phase2/mariadb
+```
+
+This will start a new container some-mariadb where the MariaDB instance uses the
+combined startup settings from /etc/mysql/my.cnf and
+/etc/mysql/conf.d/config-file.cnf, with settings from the latter taking
+precedence.
+
+> **If you add custom configuration in this way, you may invalidate the
+environment variables as source of database configuration.**
 
 ## Environment Variables
 
-When you start the mariadb image, you can adjust the configuration of the instance by passing one or more environment variables on the docker run command-line or via your docker-compose manifest file.
+Outrigger images use Environment Variables and [confd](https://github.com/kelseyhightower/confd)
+to "templatize" a number of Docker environment configurations. These templates are
+processed on startup with environment variables passed in via the docker run
+command-line or via your docker-compose manifest file. Here are the "tunable"
+configurations offered by this image.
 
-### MYSQL_PASS
+* `MYSQL_PASS`: [`admin`] This will be the password that is set for the user
+  named **admin**.  The root user does not have a password and allow local connections only.
+* `MYSQL_DATABASE`: [e.g., `app_db`] If set, a database with this name will be
+created when the database first starts up. *This is not set by default.*
+* `MYSQL_EXPIRE_LOGS_DAYS`: [`10`]
+* `MYSQL_MAX_ALLOWED_PACKET`: [`16M`]
+* `MYSQL_MAX_CONNECTIONS`: [`10`]
+* `MYSQL_QUERY_CACHE_LIMIT`: [`1M`]
+* `MYSQL_QUERY_CACHE_SIZE`: [`16M`]
+* `MYSQL_SLOW_QUERY_LOG`: [`0`] By default the slow query log is disabled.
+* `MYSQL_LONG_QUERY_TIME`: [`10`] Long query threshold time in seconds.
+* `MYSQL_LOG_QUERY_NO_INDEX`: [`0`] By default do not log queries that do not use an index.
 
-This will be the password that is set for the user named **admin**.  The root user does not have a password and allow local connections only.
+## Security Reports
 
-### MYSQL_DATABASE
+Please email outrigger@phase2technology with security concerns.
 
-This is the name of the database to be created when the container starts
+## Maintainers
 
-### MYSQL_EXPIRE_LOGS_DAYS
-
-Default: 10
-
-### MYSQL_MAX_ALLOWED_PACKET   
-
-Default: 16M
-
-### MYSQL_MAX_CONNECTIONS      
-
-Default: 10
-
-### MYSQL_QUERY_CACHE_LIMIT    
-
-Default: 1M
-
-### MYSQL_QUERY_CACHE_SIZE     
-
-Default: 16M
-
-### MYSQL_SLOW_QUERY_LOG      
-
-Default: 0
-
-By default the slow query log is disabled
-
-### MYSQL_LONG_QUERY_TIME     
-
-Default: 10 (seconds)
-
-### MYSQL_LOG_QUERY_NO_INDEX  
-
-Default: 0
-
-By default do not log queries that dont use an index
-
+[![Phase2 Logo](https://www.phase2technology.com/wp-content/uploads/2015/06/logo-retina.png)](https://www.phase2technology.com)

@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build -t phase2/mariadb .
+docker build -t outrigger/mariadb .

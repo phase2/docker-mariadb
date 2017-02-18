@@ -1,4 +1,4 @@
-FROM phase2/servicebase
+FROM outrigger/servicebase
 
 VOLUME ["/var/lib/mysql"]
 
