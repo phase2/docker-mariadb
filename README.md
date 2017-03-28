@@ -1,5 +1,5 @@
 
-# Outrigger Varnish
+# Outrigger MariaDB
 
 > MariaDB docker container with easy configuration via environment variables.
 
@@ -9,7 +9,7 @@ This mariadb image is a MySQL compliant database image with configuration throug
 a collection of environment variables detailed below.
 
 For more documentation on how Outrigger images are constructed and how to work
-with them, please [see the documentation](http://docs.outrigger.sh/en/latest/).
+with them, please [see the documentation](http://docs.outrigger.sh/).
 
 ## How to use this image
 
