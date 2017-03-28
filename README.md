@@ -3,7 +3,7 @@
 
 > MariaDB docker container with easy configuration via environment variables.
 
-[![](https://images.microbadger.com/badges/version/outrigger/mariadb.svg)](https://microbadger.com/images/outrigger/mariadb "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/outrigger/mariadb.svg)](https://microbadger.com/images/outrigger/mariadb "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/outrigger/mariadb:10.1.svg)](https://microbadger.com/images/outrigger/mariadb:10.1 "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/outrigger/mariadb:10.1.svg)](https://microbadger.com/images/outrigger/mariadb:10.1 "Get your own image badge on microbadger.com")
 
 This mariadb image is a MySQL compliant database image with configuration through
 a collection of environment variables detailed below.
