@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build -t outrigger/mariadb .
+docker build -t outrigger/mariadb:10.1 .

@@ -2,9 +2,9 @@ FROM outrigger/servicebase
 
 VOLUME ["/var/lib/mysql"]
 
-RUN yum -y install mariadb-server mariadb
-
 COPY root /
+
+RUN yum -y install MariaDB-server MariaDB-client
 
 # Set the default admin password
 ENV MYSQL_PASS admin

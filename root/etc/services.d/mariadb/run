@@ -1,6 +1,6 @@
 #!/usr/bin/with-contenv sh
 
-exec /usr/libexec/mysqld \
+exec /usr/sbin/mysqld \
   --basedir=/usr \
   --datadir=/var/lib/mysql \
   --plugin-dir=/usr/lib/mysql/plugin \
