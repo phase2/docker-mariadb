@@ -1,4 +1,3 @@
-# https://www.drupal.org/node/2754539
 [mysqld]
 innodb_large_prefix=true
 innodb_file_format=barracuda
