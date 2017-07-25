@@ -1,0 +1,2 @@
+/var/log/services true nobody 0644 0755
+/var/log/services/mariadb true nobody 0644 0755
