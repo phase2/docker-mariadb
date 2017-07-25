@@ -3,7 +3,12 @@
 
 > MariaDB docker container with easy configuration via environment variables.
 
-[![](https://images.microbadger.com/badges/version/outrigger/mariadb:10.1.svg)](https://microbadger.com/images/outrigger/mariadb:10.1 "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/outrigger/mariadb:10.1.svg)](https://microbadger.com/images/outrigger/mariadb:10.1 "Get your own image badge on microbadger.com")
+## Supported tags and respective `Dockerfile` links
+
+-	[`5.5` (*5.5/Dockerfile*)](https://github.com/phase2/docker-mariadb/blob/master/5.5/Dockerfile) [![](https://images.microbadger.com/badges/version/outrigger/mariadb:5.5.svg)](https://microbadger.com/images/outrigger/mariadb:5.5 "Get your own version badge on microbadger.com")
+-	[`10.0` (*10.0/Dockerfile*)](https://github.com/phase2/docker-mariadb/blob/master/10.0/Dockerfile) [![](https://images.microbadger.com/badges/version/outrigger/mariadb:10.0.svg)](https://microbadger.com/images/outrigger/mariadb:10.0 "Get your own version badge on microbadger.com")
+-	[`10.1` (*10.1/Dockerfile*)](https://github.com/phase2/docker-mariadb/blob/master/10.1/Dockerfile) [![](https://images.microbadger.com/badges/version/outrigger/mariadb:10.1.svg)](https://microbadger.com/images/outrigger/mariadb:10.1 "Get your own version badge on microbadger.com")
+-	[`10.2` (*10.2/Dockerfile*)](https://github.com/phase2/docker-mariadb/blob/master/10.2/Dockerfile) [![](https://images.microbadger.com/badges/version/outrigger/mariadb:10.2.svg)](https://microbadger.com/images/outrigger/mariadb:10.2 "Get your own version badge on microbadger.com")
 
 This mariadb image is a MySQL compliant database image with configuration through
 a collection of environment variables detailed below.
@@ -25,20 +30,20 @@ my-secret-pw is the password to be set for the MySQL root user
 ### Customizing Database Behavior
 
 The MariaDB startup configuration is specified in the file `/etc/mysql/my.cnf`,
-and that file in turn includes any files found in the `etc/mysql/conf.d`
+and that file in turn includes any files found in the `/etc/mysql/my.cnf.d`
 directory that end with `.cnf`. Settings in files in this directory will augment
 and/or override settings in /etc/mysql/my.cnf.
 
 If you want to use a customized MySQL configuration, you can create your
 alternative configuration file in a directory on the host machine and then mount
-that directory location as `/etc/mysql/conf.d` inside the mariadb container.
+that directory location as `/etc/mysql/my.cnf.d` inside the mariadb container.
 
 If `/my/custom/config-file.cnf` is the path and name of your custom
 configuration file, you can start your mariadb container like this note that
 only the directory path of the custom config file is used in this command):
 
 ```bash
-docker run --name some-mariadb -v /my/custom:/etc/mysql/conf.d -e MYSQL_PASS=my-secret-pw -d phase2/mariadb
+docker run --name some-mariadb -v /my/custom:/etc/mysql/my.cnf.d -e MYSQL_PASS=my-secret-pw -d outrigger/mariadb
 ```
 
 This will start a new container some-mariadb where the MariaDB instance uses the
@@ -76,4 +81,4 @@ Please email outrigger@phase2technology with security concerns.
 
 ## Maintainers
 
-[![Phase2 Logo](https://www.phase2technology.com/wp-content/uploads/2015/06/logo-retina.png)](https://www.phase2technology.com)
+[![Phase2 Logo](https://s3.amazonaws.com/phase2.public/logos/phase2-logo.png)](https://www.phase2technology.com)

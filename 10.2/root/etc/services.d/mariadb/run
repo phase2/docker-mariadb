@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv sh
+
+exec /usr/sbin/mysqld \
+  --basedir=/usr \
+  --datadir=/var/lib/mysql \
+  --plugin-dir=/usr/lib/mysql/plugin \
+  --user=mysql \
+  --open-files-limit=65534 \
+  --socket=/var/lib/mysql/mysql.sock 2>&1 >/dev/stderr
